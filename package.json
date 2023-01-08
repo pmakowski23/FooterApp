@@ -1,0 +1,36 @@
+{
+  "name": "emailfootersamorzad",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@mantine/core": "^5.10.0",
+    "@mantine/form": "^5.10.0",
+    "@mantine/hooks": "^5.10.0",
+    "@react-email/button": "0.0.5",
+    "@react-email/column": "0.0.3",
+    "@react-email/container": "0.0.5",
+    "@react-email/head": "0.0.3",
+    "@react-email/html": "0.0.3",
+    "@react-email/img": "0.0.3",
+    "@react-email/link": "0.0.3",
+    "@react-email/section": "0.0.4",
+    "@react-email/text": "0.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-email": "1.6.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.26",
+    "@types/react-dom": "^18.0.9",
+    "@vitejs/plugin-react": "^3.0.0",
+    "typescript": "^4.9.3",
+    "vite": "^4.0.0"
+  }
+}
