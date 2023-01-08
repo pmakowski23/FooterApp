@@ -5,7 +5,7 @@ import Footer, {formProps} from '../emails/footer';
 import { render } from '@react-email/render';
 
 
-export default function Demo() {
+export default function Form() {
 
   const [showFooter, setShowFooter] = useState<boolean>(false);
   const [inputValues, setInputValues] = useState<formProps>({name:"", position:"", phoneNumber:"",email:""});
@@ -13,7 +13,7 @@ export default function Demo() {
   const form = useForm({
     initialValues: {
       name:'',
-      position:'sss',
+      position:'',
       email: '',
       phoneNumber:'',
     },
@@ -28,6 +28,7 @@ export default function Demo() {
     <>
     <Box sx={{ maxWidth: 300, marginBottom:50 }} mx="auto">
       <form onSubmit={form.onSubmit((values) => {
+        //zmienna showFooter i setter do niej jest potrzebny do pokazania rezultatu. Potem do wywalenia
         setShowFooter(true);
         const footerValues:formProps = {
             name: values.name,
@@ -37,6 +38,7 @@ export default function Demo() {
         }
         console.log(footerValues);
         setInputValues(footerValues); 
+        //Tu jest html potrzebny do wygenerowania stopki
         const html = render(<Footer name={inputValues.name} position={inputValues.position} phoneNumber={inputValues.phoneNumber} email={inputValues.email}> </Footer>);
         console.log(html);
     })}>

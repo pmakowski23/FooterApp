@@ -1,11 +1,11 @@
 import './App.css'
 import Footer from '../emails/footer'
-import Demo from './Form'
+import Form from './Form'
 
 function App() {
   return (
     <div className="App">
-      <Demo></Demo>
+      <Form></Form>
     </div>
   )
 }
