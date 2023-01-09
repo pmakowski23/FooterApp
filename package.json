@@ -20,6 +20,7 @@
     "@react-email/html": "0.0.3",
     "@react-email/img": "0.0.3",
     "@react-email/link": "0.0.3",
+    "@react-email/render": "^0.0.3",
     "@react-email/section": "0.0.4",
     "@react-email/text": "0.0.3",
     "react": "^18.2.0",
