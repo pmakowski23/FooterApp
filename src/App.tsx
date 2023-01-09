@@ -1,13 +1,16 @@
-import './App.css'
-import Footer from '../emails/footer'
-import Form from './Form'
+import { MantineProvider } from "@mantine/core";
+import Form from "./Form";
 
 function App() {
   return (
-    <div className="App">
-      <Form></Form>
-    </div>
-  )
+    <MantineProvider
+      theme={{ colorScheme: "dark" }}
+      withGlobalStyles
+      withNormalizeCSS
+    >
+      <Form />
+    </MantineProvider>
+  );
 }
 
-export default App
+export default App;
