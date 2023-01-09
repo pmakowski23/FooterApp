@@ -24,11 +24,11 @@ const Footer: React.FC<formProps > = ({ name, position, phoneNumber, email}): JS
                   <Container style={rightColumn}>
                       <Text style={nameStyle}>{name}</Text>
                       <Text style={positionStyle}>{position}</Text>
-                      <Text style={phoneNumberStyle}>{phoneNumber} <Link href="https://example.com"> {email} </Link></Text>
+                      <Text style={phoneNumberStyle}>tel. +48{phoneNumber} <Link href="https://example.com"> {email} </Link></Text>
                       <Container>
                       <Text>Samorząd Studencki Politechniki Łódźkiej </Text>
                       <Text>al. Politechniki 3a | 90-924 Łódź <br/></Text>
-                      <Text>tel. +48 42 631 28 41<Link href="https://example.com">www.samorzad.p.lodz.pl</Link>
+                      <Text>tel. +48 42 631 28 41 <Link href="https://example.com">www.samorzad.p.lodz.pl</Link>
                       </Text>
                       </Container>
                   </Container>
