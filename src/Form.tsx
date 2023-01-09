@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { render } from "@react-email/render";
-import Footer from "./footer";
+import Footer from "./Footer";
 
 export default function Form() {
   const { getInputProps, onSubmit, values, setFieldValue, isDirty } = useForm({
