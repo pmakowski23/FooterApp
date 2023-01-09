@@ -69,7 +69,6 @@ const mainContainer = {
   height: 450,
   backgroundColor: "#ffffff",
   border: "solid 1px black",
-  //Jest ustawiony jakiś dziwny maxwidth. JaK dla mnie lepiej to usunąć
   maxWidth: "100vw",
   position: "relative",
 } as const;

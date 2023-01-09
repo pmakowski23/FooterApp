@@ -1,27 +1,29 @@
-import { TextInput, Checkbox, Button, Group, Box, Radio } from "@mantine/core";
+import {
+  TextInput,
+  Checkbox,
+  Button,
+  Group,
+  Radio,
+  Center,
+  Container,
+  Stack,
+  Card,
+  Flex,
+  Title,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useState } from "react";
-import Footer, { formProps } from "../emails/footer";
+import Footer from "../emails/footer";
 import { render } from "@react-email/render";
-import "./App.css";
 
 export default function Form() {
-  const [showFooter, setShowFooter] = useState<boolean>(false);
-  const [inputValues, setInputValues] = useState<formProps>({
-    name: "",
-    position: "",
-    phoneNumber: "",
-    email: "",
-  });
-  const [wrsMember, setWrsMember] = useState(false);
-  const [wrsName, setWrsName] = useState("");
-
-  const form = useForm({
+  const { getInputProps, onSubmit, values, setFieldValue, isDirty } = useForm({
     initialValues: {
       name: "",
       position: "",
       email: "",
       phoneNumber: "",
+      isWRSMember: false,
+      WRS: "",
     },
 
     validate: {
@@ -37,123 +39,94 @@ export default function Form() {
   });
 
   return (
-    <div>
-      <Box
-        className="formContainer"
-        sx={{
-          // Trzeba jakoś dać forularz na środek, pewnie są lepsze opcje na to.
-          //Teraz zakomentowane, żeby dobrze było widać stopkę
-          marginTop: 200,
-          maxWidth: 300,
-          minHeight: 390,
-          marginBottom: 50,
-          padding: 10,
-          borderRadius: 5,
-        }}
-        mx="auto"
-      >
-        <form
-          onSubmit={form.onSubmit((values) => {
-            //zmienna showFooter i setter do niej jest potrzebny do pokazania rezultatu. Potem do wywalenia
-            setShowFooter(true);
-            const footerValues: formProps = {
-              name: values.name,
-              position: values.position,
-              phoneNumber: values.phoneNumber,
-              email: values.email,
-            };
-            console.log(footerValues);
-            setInputValues(footerValues);
-            //Tu jest html potrzebny do wygenerowania stopki. Na razie jest tylko wyświetlany w konsoli. W przyszłości trzeba go jakoś przesłąć do gmaila
-            const html = render(
-              <Footer
-                name={inputValues.name}
-                position={inputValues.position}
-                phoneNumber={inputValues.phoneNumber}
-                email={inputValues.email}
+    <Center sx={{ height: "100vh", flexDirection: "column" }} display="flex">
+      <Title mb="lg">SSPŁ Generator Stopki</Title>
+      <Flex align="center">
+        <Card p="lg" sx={(t) => ({ borderRadius: t.spacing.md })} mx="auto">
+          <form
+            onSubmit={onSubmit((values) => {
+              const html = render(<Footer {...values} />);
+            })}
+          >
+            <Stack spacing="md">
+              <TextInput
+                withAsterisk
+                label="Imię i nazwisko"
+                placeholder="Imię i nazwisko"
+                {...getInputProps("name")}
+                onChange={(e) => {
+                  getInputProps("name").onChange(e);
+
+                  const [firstName, lastName] = e.target.value
+                    .toLowerCase()
+                    .split(" ");
+                  setFieldValue(
+                    "email",
+                    `${firstName[0]}.${lastName}@samorzad.p.lodz.pl`
+                  );
+                }}
+                width="100%"
+                radius={6}
               />
-            );
-            console.log(html);
-          })}
-        >
-          {/* Przed Inputami jakiś tytuł trzeba dać i może wyjaśnienie co robi aplikacja */}
-          <TextInput
-            withAsterisk
-            label="Imię i nazwisko"
-            placeholder="Imię i nazwisko"
-            {...form.getInputProps("name")}
-            radius={6}
-            sx={{
-              marginTop: 15,
-              marginBottom: 10,
-            }}
-          />
 
-          <TextInput
-            withAsterisk
-            label="Email"
-            placeholder="your@email.com"
-            {...form.getInputProps("email")}
-            radius={6}
-            sx={{
-              marginBottom: 10,
-            }}
-          />
+              <TextInput
+                withAsterisk
+                label="Stanowisko"
+                placeholder="Stanowisko"
+                {...getInputProps("position")}
+                radius={6}
+              />
 
-          <TextInput
-            withAsterisk
-            label="Numer Telefonu"
-            placeholder="Numer Telefonu"
-            {...form.getInputProps("phoneNumber")}
-            radius={6}
-            sx={{
-              marginBottom: 10,
-            }}
-          />
+              <TextInput
+                withAsterisk
+                label="Numer Telefonu"
+                placeholder="Numer Telefonu"
+                {...getInputProps("phoneNumber")}
+                radius={6}
+              />
 
-          <TextInput
-            withAsterisk
-            label="Stanowisko"
-            placeholder="Stanowisko"
-            {...form.getInputProps("position")}
-            radius={6}
-            sx={{
-              marginBottom: 10,
-            }}
-          />
-          <Checkbox
-            label="Jestem członkiem WRS-u"
-            checked={wrsMember}
-            onChange={(event) => {
-              setWrsMember(event.currentTarget.checked);
-              setWrsName("");
-            }}
-            sx={{
-              marginBottom: 10,
-            }}
-          />
-          {wrsMember && (
-            <Radio.Group
-              value={wrsName}
-              onChange={setWrsName}
-              name="WrsChoice"
-              label="Wybierz swój WRS"
-              description="Możesz wybrać tylko jeden"
-            >
-              <Radio value="WEEIA" label="WEEIA" />
-              <Radio value="WTIMS" label="WTIMS" />
-              <Radio value="OiZ" label="OiZ" />
-            </Radio.Group>
-          )}
+              <TextInput
+                withAsterisk
+                label="Email"
+                placeholder="your@email.com"
+                {...getInputProps("email")}
+                radius={6}
+              />
 
-          <Group position="right" mt="md">
-            <Button sx={{ backgroundColor: "#673ab7" }} type="submit">
-              Submit
-            </Button>
-          </Group>
-        </form>
-      </Box>
-      {showFooter && <Footer {...inputValues} />}
-    </div>
+              <Checkbox
+                label="Jestem członkiem WRS-u"
+                {...getInputProps("isWRSMember")}
+              />
+
+              <Radio.Group
+                {...getInputProps("WRS")}
+                name="WrsChoice"
+                label="Wybierz swój WRS"
+                description="Możesz wybrać tylko jeden"
+              >
+                <Radio
+                  value="WEEIA"
+                  label="WEEIA"
+                  disabled={!values.isWRSMember}
+                />
+                <Radio
+                  value="WTIMS"
+                  label="WTIMS"
+                  disabled={!values.isWRSMember}
+                />
+                <Radio value="OiZ" label="OiZ" disabled={!values.isWRSMember} />
+              </Radio.Group>
+
+              <Group position="right">
+                <Button type="submit">Submit</Button>
+              </Group>
+            </Stack>
+          </form>
+        </Card>
+        <Container>
+          <Footer {...values} />
+        </Container>
+      </Flex>
+    </Center>
   );
 }
