@@ -1,28 +1,26 @@
 import {
   TextInput,
-  Checkbox,
-  Button,
-  Group,
-  Radio,
   Center,
   Container,
   Stack,
   Card,
   Flex,
   Title,
+  Input
 } from "@mantine/core";
+import InputMask from 'react-input-mask';
 import { useForm } from "@mantine/form";
 import { render } from "@react-email/render";
 import Footer from "./Footer";
 
 export default function Form() {
   const { getInputProps, onSubmit, values, setFieldValue, isDirty } = useForm({
+    validateInputOnChange: true,
     initialValues: {
       name: "",
       position: "",
       email: "",
       phoneNumber: "",
-      isWRSMember: false,
       WRS: "",
     },
 
@@ -31,10 +29,8 @@ export default function Form() {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Nieprawidłowy mail"),
       name: (value) =>
         value.length > 4 ? null : "Masz tak krótkie imię i nazwisko?",
-      position: (value) =>
-        value.length > 4 ? null : "Nie ma stanowiska o tak krótkiej nazwie",
       phoneNumber: (value) =>
-        value.length === 9 ? null : "Coś jest nie tak z twoim numerem telefonu",
+        value.search("_")  ? null : "Zły numer telefonu",
     },
   });
 
@@ -76,14 +72,19 @@ export default function Form() {
                 {...getInputProps("position")}
                 radius={6}
               />
-
-              <TextInput
-                withAsterisk
-                label="Numer Telefonu"
-                placeholder="Numer Telefonu"
-                {...getInputProps("phoneNumber")}
-                radius={6}
-              />
+              <Input.Wrapper
+              label="Numer Telefonu"
+              withAsterisk
+              error={getInputProps("phoneNumber").value.search("_") === -1 ? null : "Zły numer telefonu"}
+              >
+                <Input
+                  component={InputMask}
+                  mask="+48 999 999 999"
+                  placeholder="Your phone"
+                  {...getInputProps("phoneNumber")}
+                  radius={6}
+                />
+              </Input.Wrapper>
 
               <TextInput
                 withAsterisk
@@ -93,33 +94,6 @@ export default function Form() {
                 radius={6}
               />
 
-              <Checkbox
-                label="Jestem członkiem WRS-u"
-                {...getInputProps("isWRSMember")}
-              />
-
-              <Radio.Group
-                {...getInputProps("WRS")}
-                name="WrsChoice"
-                label="Wybierz swój WRS"
-                description="Możesz wybrać tylko jeden"
-              >
-                <Radio
-                  value="WEEIA"
-                  label="WEEIA"
-                  disabled={!values.isWRSMember}
-                />
-                <Radio
-                  value="WTIMS"
-                  label="WTIMS"
-                  disabled={!values.isWRSMember}
-                />
-                <Radio value="OiZ" label="OiZ" disabled={!values.isWRSMember} />
-              </Radio.Group>
-
-              <Group position="right">
-                <Button type="submit">Submit</Button>
-              </Group>
             </Stack>
           </form>
         </Card>
