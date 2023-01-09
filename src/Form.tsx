@@ -12,8 +12,8 @@ import {
   Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import Footer from "../emails/footer";
 import { render } from "@react-email/render";
+import Footer from "./footer";
 
 export default function Form() {
   const { getInputProps, onSubmit, values, setFieldValue, isDirty } = useForm({
@@ -62,7 +62,7 @@ export default function Form() {
                     .split(" ");
                   setFieldValue(
                     "email",
-                    `${firstName[0]}.${lastName}@samorzad.p.lodz.pl`
+                    `${firstName[0]}.${lastName || ""}@samorzad.p.lodz.pl`
                   );
                 }}
                 width="100%"
