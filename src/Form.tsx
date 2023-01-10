@@ -6,12 +6,15 @@ import {
   Card,
   Flex,
   Title,
-  Input
+  Input,
+  FileInput,
+  Select
 } from "@mantine/core";
 import InputMask from 'react-input-mask';
 import { useForm } from "@mantine/form";
 import { render } from "@react-email/render";
 import Footer from "./Footer";
+import { IconUpload } from '@tabler/icons';
 
 export default function Form() {
   const { getInputProps, onSubmit, values, setFieldValue, isDirty } = useForm({
@@ -22,6 +25,10 @@ export default function Form() {
       email: "",
       phoneNumber: "",
       WRS: "",
+      secondLogo:"",
+      role:"",
+      wrsSSPL:"",
+      department:"",
     },
 
     validate: {
@@ -29,8 +36,6 @@ export default function Form() {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Nieprawidłowy mail"),
       name: (value) =>
         value.length > 4 ? null : "Masz tak krótkie imię i nazwisko?",
-      phoneNumber: (value) =>
-        value.search("_")  ? null : "Zły numer telefonu",
     },
   });
 
@@ -38,7 +43,7 @@ export default function Form() {
     <Center sx={{ height: "100vh", flexDirection: "column" }} display="flex">
       <Title mb="lg">SSPŁ Generator Stopki</Title>
       <Flex align="center">
-        <Card p="lg" sx={(t) => ({ borderRadius: t.spacing.md })} mx="auto">
+        <Card p="lg" sx={(t) => ({ borderRadius: t.spacing.md, width:450 })} mx="auto">
           <form
             onSubmit={onSubmit((values) => {
               const html = render(<Footer {...values} />);
@@ -64,19 +69,49 @@ export default function Form() {
                 width="100%"
                 radius={6}
               />
-
-              <TextInput
-                withAsterisk
-                label="Stanowisko"
-                placeholder="Stanowisko"
-                {...getInputProps("position")}
-                radius={6}
+              <Flex>
+              <Select
+                sx={{fontSize:8}}
+                label="Rola"
+                placeholder="Wybierz jedno"
+                data={[
+                  { value: 'Przewodniczący', label: 'Przewodniczący' },
+                  { value: 'Członek', label: 'Członek' },
+                  { value: 'Sympatyk', label: 'Sympatyk' },
+                ]}
+                {...getInputProps("role")}
               />
-              <Input.Wrapper
-              label="Numer Telefonu"
-              withAsterisk
-              error={getInputProps("phoneNumber").value.search("_") === -1 ? null : "Zły numer telefonu"}
-              >
+              <Select
+                sx={{fontSize:8}}
+                label="WRS czy SSPŁ"
+                placeholder="Wybierz jedno"
+                data={[
+                  { value: 'Wydziałowej Rady Samorządu', label: 'Wydziałowej Rady Samorządu' },
+                  { value: 'Samorządu', label: 'Samorządu' },
+                ]}
+                {...getInputProps("wrsSSPL")}
+              />
+
+              <Select
+                sx={{fontSize:8}}
+                label="Wydział"
+                placeholder="Wybierz wydział"
+                data={getInputProps("wrsSSPL").value === "Samorządu" ? [
+                  { value: 'Studenckiego', label: 'Studenckiego' },
+                ]:
+                [
+                  { value: 'WEEIA', label: 'WEEIA' },
+                  { value: 'WTIMS', label: 'WTIMS' },
+                  { value: 'OIZ', label: 'OIZ' },
+                ]}
+                {...getInputProps("department")}
+              />      
+              </Flex>
+                  <Input.Wrapper
+                  label="Numer Telefonu"
+                  withAsterisk
+                  error={getInputProps("phoneNumber").value.search("_") === -1 ? null : "Zły numer telefonu"}
+                  >
                 <Input
                   component={InputMask}
                   mask="+48 999 999 999"
@@ -93,6 +128,12 @@ export default function Form() {
                 {...getInputProps("email")}
                 radius={6}
               />
+              <FileInput 
+                label="Drugie logo" 
+                placeholder="Drugie logo" 
+                icon={<IconUpload size={14} />} 
+                {...getInputProps("secondLogo")}
+                />
 
             </Stack>
           </form>

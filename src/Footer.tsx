@@ -10,6 +10,7 @@ export type formProps = {
   position: string;
   phoneNumber: string;
   email: string;
+  imageSrc?:string;
 };
 
 const Footer: React.FC<formProps> = ({
@@ -17,16 +18,25 @@ const Footer: React.FC<formProps> = ({
   position,
   phoneNumber,
   email,
+  imageSrc
 }): JSX.Element => {
   return (
     <Container style={mainContainer}>
       <Section style={mainSection} align="left">
+      <Container style={columnStyle}>
         <Img
           src="https://samorzad.p.lodz.pl/addons/shared_addons/themes/adonis/img/logo-brown.png"
           alt="logo"
           style={imageStyle}
         />
-        <Container style={rightColumn}>
+        {imageSrc && <Img
+          src={imageSrc}
+          alt="logo2"
+          style={imageStyle}
+        />
+        }
+        </Container>
+        <Container style={columnStyle}>
           <Text style={nameStyle}>{name}</Text>
           <Text style={positionStyle}>{position}</Text>
           <Text style={phoneNumberStyle}>
@@ -82,7 +92,8 @@ const mainSection = {
 } as const;
 
 const imageStyle = {
-  width: 300,
+  width: 250,
+  paddingBottom:5,
 } as const;
 
 const absoulute = {
@@ -92,7 +103,7 @@ const absoulute = {
   width: 800,
 } as const;
 
-const rightColumn = {
+const columnStyle = {
   marginLeft: 20,
 } as const;
 
