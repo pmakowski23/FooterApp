@@ -1,29 +1,34 @@
 import {
   TextInput,
-  Checkbox,
-  Button,
-  Group,
-  Radio,
   Center,
   Container,
   Stack,
   Card,
   Flex,
   Title,
+  Input,
+  FileInput,
+  Select
 } from "@mantine/core";
+import InputMask from 'react-input-mask';
 import { useForm } from "@mantine/form";
 import { render } from "@react-email/render";
 import Footer from "./Footer";
+import { IconUpload } from '@tabler/icons';
 
 export default function Form() {
   const { getInputProps, onSubmit, values, setFieldValue, isDirty } = useForm({
+    validateInputOnChange: true,
     initialValues: {
       name: "",
       position: "",
       email: "",
       phoneNumber: "",
-      isWRSMember: false,
       WRS: "",
+      secondLogo:"",
+      role:"",
+      wrsSSPL:"",
+      department:"",
     },
 
     validate: {
@@ -31,10 +36,6 @@ export default function Form() {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Nieprawidłowy mail"),
       name: (value) =>
         value.length > 4 ? null : "Masz tak krótkie imię i nazwisko?",
-      position: (value) =>
-        value.length > 4 ? null : "Nie ma stanowiska o tak krótkiej nazwie",
-      phoneNumber: (value) =>
-        value.length === 9 ? null : "Coś jest nie tak z twoim numerem telefonu",
     },
   });
 
@@ -42,7 +43,7 @@ export default function Form() {
     <Center sx={{ height: "100vh", flexDirection: "column" }} display="flex">
       <Title mb="lg">SSPŁ Generator Stopki</Title>
       <Flex align="center">
-        <Card p="lg" sx={(t) => ({ borderRadius: t.spacing.md })} mx="auto">
+        <Card p="lg" sx={(t) => ({ borderRadius: t.spacing.md, width:450 })} mx="auto">
           <form
             onSubmit={onSubmit((values) => {
               const html = render(<Footer {...values} />);
@@ -68,22 +69,57 @@ export default function Form() {
                 width="100%"
                 radius={6}
               />
-
-              <TextInput
-                withAsterisk
-                label="Stanowisko"
-                placeholder="Stanowisko"
-                {...getInputProps("position")}
-                radius={6}
+              <Flex>
+              <Select
+                sx={{fontSize:8}}
+                label="Rola"
+                placeholder="Wybierz jedno"
+                data={[
+                  { value: 'Przewodniczący', label: 'Przewodniczący' },
+                  { value: 'Członek', label: 'Członek' },
+                  { value: 'Sympatyk', label: 'Sympatyk' },
+                ]}
+                {...getInputProps("role")}
+              />
+              <Select
+                sx={{fontSize:8}}
+                label="WRS czy SSPŁ"
+                placeholder="Wybierz jedno"
+                data={[
+                  { value: 'Wydziałowej Rady Samorządu', label: 'Wydziałowej Rady Samorządu' },
+                  { value: 'Samorządu', label: 'Samorządu' },
+                ]}
+                {...getInputProps("wrsSSPL")}
               />
 
-              <TextInput
-                withAsterisk
-                label="Numer Telefonu"
-                placeholder="Numer Telefonu"
-                {...getInputProps("phoneNumber")}
-                radius={6}
-              />
+              <Select
+                sx={{fontSize:8}}
+                label="Wydział"
+                placeholder="Wybierz wydział"
+                data={getInputProps("wrsSSPL").value === "Samorządu" ? [
+                  { value: 'Studenckiego', label: 'Studenckiego' },
+                ]:
+                [
+                  { value: 'WEEIA', label: 'WEEIA' },
+                  { value: 'WTIMS', label: 'WTIMS' },
+                  { value: 'OIZ', label: 'OIZ' },
+                ]}
+                {...getInputProps("department")}
+              />      
+              </Flex>
+                  <Input.Wrapper
+                  label="Numer Telefonu"
+                  withAsterisk
+                  error={getInputProps("phoneNumber").value.search("_") === -1 ? null : "Zły numer telefonu"}
+                  >
+                <Input
+                  component={InputMask}
+                  mask="+48 999 999 999"
+                  placeholder="Your phone"
+                  {...getInputProps("phoneNumber")}
+                  radius={6}
+                />
+              </Input.Wrapper>
 
               <TextInput
                 withAsterisk
@@ -92,34 +128,13 @@ export default function Form() {
                 {...getInputProps("email")}
                 radius={6}
               />
-
-              <Checkbox
-                label="Jestem członkiem WRS-u"
-                {...getInputProps("isWRSMember")}
-              />
-
-              <Radio.Group
-                {...getInputProps("WRS")}
-                name="WrsChoice"
-                label="Wybierz swój WRS"
-                description="Możesz wybrać tylko jeden"
-              >
-                <Radio
-                  value="WEEIA"
-                  label="WEEIA"
-                  disabled={!values.isWRSMember}
+              <FileInput 
+                label="Drugie logo" 
+                placeholder="Drugie logo" 
+                icon={<IconUpload size={14} />} 
+                {...getInputProps("secondLogo")}
                 />
-                <Radio
-                  value="WTIMS"
-                  label="WTIMS"
-                  disabled={!values.isWRSMember}
-                />
-                <Radio value="OiZ" label="OiZ" disabled={!values.isWRSMember} />
-              </Radio.Group>
 
-              <Group position="right">
-                <Button type="submit">Submit</Button>
-              </Group>
             </Stack>
           </form>
         </Card>
